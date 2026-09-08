@@ -5,14 +5,18 @@ compatibility_date = "2025-08-16"
 [[d1_databases]]
 binding = "DB"
 database_name = "chaser"
-# created with: wrangler d1 create chaser  (paste id here before deploy)
-database_id = "REPLACE_WITH_D1_ID"
+# created 2026-09-08 via: wrangler d1 create chaser
+database_id = "8ea4be3a-2537-4a1a-a102-9a03b5864ec1"
+
+routes = [
+  { pattern = "entangleit.com/chaser*", zone_name = "entangleit.com" }
+]
 
 [triggers]
 crons = ["*/15 * * * *"] # sequence engine tick
 
 [vars]
-APP_URL = "http://localhost:8787"
+APP_URL = "https://entangleit.com/chaser"
 PRICE_MONTHLY = "price_REPLACE_ME" # £29/mo Price in OUR Stripe account
 TRIAL_DAYS = "14"
 

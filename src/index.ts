@@ -7,31 +7,37 @@ import { invoices } from "./routes/invoices";
 import { webhooks } from "./routes/webhooks";
 import { tick } from "./lib/engine";
 
-const app = new Hono<{ Bindings: Env }>();
+const inner = new Hono<{ Bindings: Env }>();
 
-app.get("/health", (c) => c.json({ ok: true, app: "chaser" }));
-app.route("/api/auth", auth);
-app.route("/api/billing", billing);
-app.route("/api/connect", connect);
-app.route("/api/invoices", invoices);
-app.route("/api/dashboard", dashboard);
-app.route("/webhooks", webhooks);
+inner.get("/health", (c) => c.json({ ok: true, app: "chaser" }));
+inner.route("/api/auth", auth);
+inner.route("/api/billing", billing);
+inner.route("/api/connect", connect);
+inner.route("/api/invoices", invoices);
+inner.route("/api/dashboard", dashboard);
+inner.route("/webhooks", webhooks);
 
-app.get("/", (c) =>
+inner.get("/", (c) =>
   c.html(`<!doctype html><html><body style="font-family:system-ui;max-width:640px;margin:40px auto">
-<h1>Chaser</h1><p>Overdue invoices chase themselves. <a href="/app">Open the app</a></p>
+<h1>Chaser</h1><p>Overdue invoices chase themselves. <a href="/chaser/app">Open the app</a></p>
 <p>£29/mo · 14-day trial · cancel anytime.</p></body></html>`),
 );
 
-app.get("/app", (c) =>
+inner.get("/app", (c) =>
   c.html(`<!doctype html><html><body style="font-family:system-ui;max-width:640px;margin:40px auto">
-<h1>Chaser app</h1><p>API-first MVP. Use <code>/api/…</code> endpoints; full UI next.</p></body></html>`),
+<h1>Chaser app</h1><p>API-first MVP. Use <code>/chaser/api/…</code> endpoints; full UI next.</p></body></html>`),
 );
 
-app.get("/paid", (c) =>
+inner.get("/paid", (c) =>
   c.html(`<!doctype html><html><body style="font-family:system-ui;max-width:640px;margin:40px auto">
 <h1>Paid — thank you!</h1><p>Your payment went through. The reminders stop here.</p></body></html>`),
 );
+
+// Served at entangleit.com/chaser* (route specificity beats the storefront
+// wildcard). Mounted under /chaser so workers.dev serves it at /chaser/* too.
+const app = new Hono<{ Bindings: Env }>();
+app.route("/chaser", inner);
+app.get("/chaser/", (c) => c.redirect("/chaser"));
 
 export default {
   fetch: app.fetch,
