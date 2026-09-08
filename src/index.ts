@@ -4,6 +4,7 @@ import { auth } from "./routes/auth";
 import { billing, connect } from "./routes/billing";
 import { dashboard } from "./routes/dashboard";
 import { invoices } from "./routes/invoices";
+import { pages } from "./routes/pages";
 import { webhooks } from "./routes/webhooks";
 import { tick } from "./lib/engine";
 
@@ -16,17 +17,7 @@ inner.route("/api/connect", connect);
 inner.route("/api/invoices", invoices);
 inner.route("/api/dashboard", dashboard);
 inner.route("/webhooks", webhooks);
-
-inner.get("/", (c) =>
-  c.html(`<!doctype html><html><body style="font-family:system-ui;max-width:640px;margin:40px auto">
-<h1>Chaser</h1><p>Overdue invoices chase themselves. <a href="/chaser/app">Open the app</a></p>
-<p>£29/mo · 14-day trial · cancel anytime.</p></body></html>`),
-);
-
-inner.get("/app", (c) =>
-  c.html(`<!doctype html><html><body style="font-family:system-ui;max-width:640px;margin:40px auto">
-<h1>Chaser app</h1><p>API-first MVP. Use <code>/chaser/api/…</code> endpoints; full UI next.</p></body></html>`),
-);
+inner.route("/", pages);
 
 inner.get("/paid", (c) =>
   c.html(`<!doctype html><html><body style="font-family:system-ui;max-width:640px;margin:40px auto">

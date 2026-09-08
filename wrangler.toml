@@ -2,15 +2,17 @@ name = "chaser"
 main = "src/index.ts"
 compatibility_date = "2025-08-16"
 
+# NOTE: must stay top-level (before any [[...]] table) or TOML nests it.
+routes = [
+  { pattern = "entangleit.com/chaser", zone_name = "entangleit.com" },
+  { pattern = "entangleit.com/chaser/*", zone_name = "entangleit.com" },
+]
+
 [[d1_databases]]
 binding = "DB"
 database_name = "chaser"
 # created 2026-09-08 via: wrangler d1 create chaser
 database_id = "8ea4be3a-2537-4a1a-a102-9a03b5864ec1"
-
-routes = [
-  { pattern = "entangleit.com/chaser*", zone_name = "entangleit.com" }
-]
 
 [triggers]
 crons = ["*/15 * * * *"] # sequence engine tick

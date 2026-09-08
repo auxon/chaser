@@ -18,8 +18,9 @@ auth.post("/signup", async (c) => {
     )
       .bind(id, String(email).toLowerCase(), await hashPassword(String(password), c.env.SESSION_SALT), String(business_name ?? ""))
       .run();
-  } catch {
-    return c.json({ error: "email_taken" }, 409);
+  } catch (e) {
+    if (String(e).includes("UNIQUE")) return c.json({ error: "email_taken" }, 409);
+    throw e; // surface real DB errors, never mislabel them
   }
   const sid = uid("s");
   await c.env.DB.prepare("INSERT INTO sessions (id, user_id, expires_at) VALUES (?,?,datetime('now','+30 days'))")
