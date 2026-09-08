@@ -1,0 +1,20 @@
+name = "chaser"
+main = "src/index.ts"
+compatibility_date = "2025-08-16"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "chaser"
+# created with: wrangler d1 create chaser  (paste id here before deploy)
+database_id = "REPLACE_WITH_D1_ID"
+
+[triggers]
+crons = ["*/15 * * * *"] # sequence engine tick
+
+[vars]
+APP_URL = "http://localhost:8787"
+PRICE_MONTHLY = "price_REPLACE_ME" # £29/mo Price in OUR Stripe account
+TRIAL_DAYS = "14"
+
+# secrets (wrangler secret put): OUR_STRIPE_KEY, STRIPE_WEBHOOK_SECRET,
+# RAK_MASTER_KEY (32-byte hex for RAK encryption), RESEND_API_KEY, SESSION_SALT

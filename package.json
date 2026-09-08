@@ -1,0 +1,21 @@
+{
+  "name": "chaser",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Overdue invoices chase themselves",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:local": "wrangler d1 execute chaser --local --file=./schema.sql",
+    "test": "node --test \"tests/*.test.ts\""
+  },
+  "dependencies": {
+    "hono": "^4.7.0",
+    "stripe": "^22.6.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250816.0",
+    "wrangler": "^3.114.0"
+  }
+}
