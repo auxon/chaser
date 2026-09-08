@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS invoices (
   debtor_id TEXT NOT NULL REFERENCES debtors(id),
   number TEXT NOT NULL,
   amount_pence INTEGER NOT NULL,
-  currency TEXT NOT NULL DEFAULT 'gbp',
+  currency TEXT NOT NULL DEFAULT 'usd',
   due_date TEXT NOT NULL,
   photo_r2_key TEXT, -- phase 1: stored, not parsed
   status TEXT NOT NULL DEFAULT 'chasing', -- chasing | paused | paid | paid_cash

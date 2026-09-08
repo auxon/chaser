@@ -2,7 +2,7 @@
 
 Tradespeople and freelancers add an overdue invoice; Chaser sends a
 polite→firm email escalation with a pay-now link, stops the second it's
-paid, and shows what's still outstanding. £29/mo, 14-day trial.
+paid, and shows what's still outstanding. $29/mo USD, 14-day trial.
 
 ## Stack
 
@@ -39,7 +39,7 @@ stripe listen --forward-to localhost:8787/webhooks/ours
 
 ```bash
 wrangler d1 create chaser   # paste id into wrangler.toml
-# create the £29/mo Price in YOUR Stripe dashboard -> PRICE_MONTHLY
+# create the $29/mo USD Price in YOUR Stripe dashboard -> PRICE_MONTHLY
 npm run deploy
 ```
 

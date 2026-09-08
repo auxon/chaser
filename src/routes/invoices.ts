@@ -31,7 +31,7 @@ invoices.post("/", async (c) => {
   await c.env.DB.prepare(
     "INSERT INTO invoices (id, user_id, debtor_id, number, amount_pence, currency, due_date) VALUES (?,?,?,?,?,?,?)",
   )
-    .bind(invId, u.userId, debtorId, String(number), Number(amount_pence), String(currency ?? "gbp"), String(due_date))
+    .bind(invId, u.userId, debtorId, String(number), Number(amount_pence), String(currency ?? "usd"), String(due_date))
     .run();
   await c.env.DB.prepare("INSERT INTO sequence_runs (id, invoice_id) VALUES (?,?)")
     .bind(uid("run"), invId)

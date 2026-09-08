@@ -7,7 +7,7 @@ const V: Vars = {
   business: "Acme Plumbing",
   debtor: "Jo",
   number: "INV-42",
-  amount: "£500.00",
+  amount: "$500.00",
   due: "2026-09-01",
   payUrl: "https://pay.example/s/123",
 };

@@ -1,7 +1,7 @@
 // Server-rendered pages. Data loads client-side from /chaser/api/* (cookie auth).
 import { Hono } from "hono";
 import type { Env } from "../types";
-import { esc, gbp, layout } from "../lib/html";
+import { esc, layout, moneyFmt } from "../lib/html";
 
 export const pages = new Hono<{ Bindings: Env }>();
 
@@ -12,7 +12,7 @@ pages.get("/", (c) =>
       `<h1>Overdue invoices chase themselves.</h1>
 <p class="mut">Add an overdue invoice. Chaser sends polite-to-firm reminders with a pay-now link, and stops the second you're paid.</p>
 <div class="card"><div class="nums">
-<div><div class="big">£29</div><div class="mut small">per month, flat</div></div>
+<div><div class="big">$29</div><div class="mut small">per month, flat</div></div>
 <div><div class="big">14-day</div><div class="mut small">free trial</div></div>
 <div><div class="big">5 min</div><div class="mut small">to set up</div></div>
 </div></div>
@@ -55,7 +55,7 @@ pages.get("/onboarding", (c) =>
       "Get set up",
       `<h1>Get set up in 5 minutes</h1>
 <div class="step"><div class="n">1</div><div class="card" style="flex:1;margin:0">
-<strong>Activate your subscription</strong><p class="mut small">£29/mo after a 14-day trial. Cancel anytime.</p>
+<strong>Activate your subscription</strong><p class="mut small">$29/mo after a 14-day trial. Cancel anytime.</p>
 <button id="sub">Subscribe</button></div></div>
 <div class="step"><div class="n">2</div><div class="card" style="flex:1;margin:0">
 <strong>Connect Stripe (to receive payments)</strong>
@@ -89,12 +89,12 @@ pages.get("/app", (c) =>
 <h2>Add overdue invoice</h2><div class="card">
 <div class="row"><div><label>Client name<input id="dn"></label></div><div><label>Client email<input id="de" type="email"></label></div></div>
 <div class="row"><div><label>Invoice #<input id="no" placeholder="INV-001"></label></div>
-<div><label>Amount (£)<input id="amt" type="number" step="0.01" min="1"></label></div>
+<div><label>Amount ($)<input id="amt" type="number" step="0.01" min="1"></label></div>
 <div><label>Due date<input id="due" type="date"></label></div></div>
 <button id="add">Start chasing</button><div class="err" id="e"></div></div>
 <h2>Invoices</h2><div id="list"></div>
 <script>
-const money=p=>new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP'}).format(p/100);
+const money=p=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(p/100);
 (async()=>{const r=await api('/dashboard');if(r.status===402){location.href='/chaser/onboarding';return}
 const j=await r.json();n_out.textContent=money(j.totals.outstanding);n_col.textContent=money(j.totals.collected);n_ch.textContent=j.totals.chasing;
 list.innerHTML=j.invoices.map(i=>'<div class="card inv"><div><a href="/chaser/app/invoices/'+i.id+'"><strong>'+esc(i.number)+'</strong></a><div class="mut small">'+esc(i.debtor_name)+' · '+money(i.amount_pence)+' · due '+esc(i.due_date)+'</div></div><span class="pill '+i.status+'">'+i.status.replace('_',' ')+'</span></div>').join('')||'<p class="mut">Nothing here yet — add your first invoice above.</p>'})().catch(()=>{});
@@ -130,4 +130,4 @@ cash.onclick=async()=>{await api('/invoices/'+id+'/paid-cash',{method:'POST'});l
   );
 });
 
-export { esc as _esc, gbp as _gbp };
+export { esc as _esc, moneyFmt as _moneyFmt };

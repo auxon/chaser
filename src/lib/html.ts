@@ -41,10 +41,10 @@ export function esc(s: string): string {
   return String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]!));
 }
 
-export const gbp = (pence: number, cur = "gbp") => {
+export const moneyFmt = (cents: number, cur = "usd") => {
   try {
-    return new Intl.NumberFormat("en-GB", { style: "currency", currency: String(cur).toUpperCase() }).format(pence / 100);
+    return new Intl.NumberFormat("en-US", { style: "currency", currency: String(cur).toUpperCase() }).format(cents / 100);
   } catch {
-    return (pence / 100).toFixed(2);
+    return (cents / 100).toFixed(2);
   }
 };

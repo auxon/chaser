@@ -10,7 +10,16 @@ import { tick } from "./lib/engine";
 
 const inner = new Hono<{ Bindings: Env }>();
 
-inner.get("/health", (c) => c.json({ ok: true, app: "chaser" }));
+inner.get("/health", (c) => {
+  // Readiness: names only, never values. If ready=false, check secrets/vars.
+  const needSecrets = ["SESSION_SALT", "RAK_MASTER_KEY", "OUR_STRIPE_KEY", "RESEND_API_KEY"];
+  const missingSecrets = needSecrets.filter((k) => !(c.env as Record<string, unknown>)[k]);
+  const missingVars = ["PRICE_MONTHLY"].filter(
+    (k) => !(c.env as Record<string, unknown>)[k] || String((c.env as Record<string, unknown>)[k]).includes("REPLACE_ME"),
+  );
+  const missing = [...missingSecrets, ...missingVars];
+  return c.json({ ok: true, app: "chaser", ready: missing.length === 0, missing });
+});
 inner.route("/api/auth", auth);
 inner.route("/api/billing", billing);
 inner.route("/api/connect", connect);

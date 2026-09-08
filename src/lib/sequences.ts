@@ -11,7 +11,7 @@ export interface Vars {
   business: string;
   debtor: string;
   number: string;
-  amount: string; // formatted, e.g. £500.00
+  amount: string; // formatted, e.g. $500.00
   due: string;
   payUrl: string;
 }

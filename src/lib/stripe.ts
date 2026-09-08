@@ -49,7 +49,7 @@ export async function collectionCheckout(
   });
 }
 
-// OUR billing: £29/mo subscribe with trial.
+// OUR billing: $29/mo subscribe with trial.
 export async function subscribeCheckout(env: Env, userId: string, email: string) {
   const s = ourClient(env);
   const customer = await s.customers.create({ email, metadata: { chaser_user: userId } });

@@ -8,7 +8,7 @@ import { collectionCheckout } from "./stripe";
 import { uid } from "./crypto";
 
 const money = (pence: number, currency: string) =>
-  new Intl.NumberFormat("en-GB", { style: "currency", currency: currency.toUpperCase() }).format(pence / 100);
+  new Intl.NumberFormat("en-US", { style: "currency", currency: currency.toUpperCase() }).format(pence / 100);
 
 export async function tick(env: Env): Promise<{ sent: number; skipped: number }> {
   let sent = 0;
